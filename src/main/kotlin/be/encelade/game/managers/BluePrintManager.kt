@@ -20,6 +20,7 @@ class BluePrintManager(val app: SimpleApplication) {
 
     fun enable() {
         enabled = true
+        destroy()
         create()
     }
 
