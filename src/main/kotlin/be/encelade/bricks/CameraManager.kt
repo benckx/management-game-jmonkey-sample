@@ -9,31 +9,30 @@ class CameraManager(val app: SimpleApplication) {
 
     private val cameraNode = CameraNode("cameraNode", app.camera)
 
-    private var oldPosition: Vector2f? = null
-    private var deltaX = 0f
-    private var deltaY = 0f
+    private var previousCursorPosition: Vector2f? = null
+    private var cursorSpeedX = 0f
+    private var cursorSpeedY = 0f
 
     var rightClickPressed = false
 
     fun register() = app.rootNode.attachChild(cameraNode)
 
     fun simpleUpdate(tpf: Float) {
-        val currentPosition = Vector2f(app.inputManager.cursorPosition)
+        updateCursorSpeed(app.inputManager.cursorPosition)
 
-        if (oldPosition == null) {
-            oldPosition = currentPosition
-        } else {
-            deltaX = currentPosition.x - oldPosition!!.x
-            deltaY = currentPosition.y - oldPosition!!.y
-            oldPosition = Vector2f(currentPosition)
+        if (rightClickPressed && (cursorSpeedX != 0f || cursorSpeedY != 0f)) {
+            val movementSpeed = BASE_SPEED_RATE * cameraNode.camera.location.z * tpf
+            cameraNode.move(cursorSpeedX * movementSpeed, cursorSpeedY * movementSpeed, 0f)
         }
+    }
 
-        if (rightClickPressed) {
-            if (deltaX != 0f || deltaY != 0f) {
-                println("${deltaX}, ${deltaY}")
-                val rate = (1 / 70f) * cameraNode.camera.location.z * tpf
-                cameraNode.move(deltaX * rate, deltaY * rate, 0f)
-            }
+    private fun updateCursorSpeed(currentPosition: Vector2f) {
+        if (previousCursorPosition == null) {
+            previousCursorPosition = currentPosition
+        } else {
+            cursorSpeedX = currentPosition.x - previousCursorPosition!!.x
+            cursorSpeedY = currentPosition.y - previousCursorPosition!!.y
+            previousCursorPosition = Vector2f(currentPosition)
         }
     }
 
@@ -57,6 +56,8 @@ class CameraManager(val app: SimpleApplication) {
     }
 
     companion object {
+
+        const val BASE_SPEED_RATE = (1 / 60f)
 
         const val MIN_Z = 2
         const val MAX_Z = 40
