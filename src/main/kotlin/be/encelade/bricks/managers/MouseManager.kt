@@ -1,6 +1,7 @@
 package be.encelade.bricks.managers
 
 import com.jme3.app.SimpleApplication
+import com.jme3.collision.CollisionResult
 import com.jme3.collision.CollisionResults
 import com.jme3.math.Ray
 import com.jme3.math.Vector2f
@@ -21,21 +22,25 @@ class MouseManager(val app: SimpleApplication, val bluePrintManager: BluePrintMa
         updateCursorSpeed(app.inputManager.cursorPosition)
 
         if (!rightClickPressed) {
-            val floorCollision = getCursorCollisions().find { it.geometry.name == "floor" }
-            if (floorCollision != null) {
-                val wuX = floorCollision.contactPoint.x.roundToInt()
-                val wuY = floorCollision.contactPoint.y.roundToInt()
-                if (wuX != floorPosition.first || wuY != floorPosition.second) {
-                    // TODO: replace by listener system
-                    println("change from $floorPosition to ($wuX, $wuY)")
-                    floorPosition = Pair(wuX, wuY)
-                    bluePrintManager.updatePosition(wuX, wuY)
-                }
-            }
+            updateCursorPositionOnTheFloor()
         }
     }
 
     fun isCursorMoving() = speedX != 0f || speedY != 0f
+
+    private fun updateCursorPositionOnTheFloor() {
+        val floorCollision = getFloorCollision()
+        if (floorCollision != null) {
+            val wuX = floorCollision.contactPoint.x.roundToInt()
+            val wuY = floorCollision.contactPoint.y.roundToInt()
+            if (wuX != floorPosition.first || wuY != floorPosition.second) {
+                // TODO: replace by listener system
+//                println("change from $floorPosition to ($wuX, $wuY)")
+                floorPosition = Pair(wuX, wuY)
+                bluePrintManager.updatePosition(wuX, wuY)
+            }
+        }
+    }
 
     private fun updateCursorSpeed(currentPosition: Vector2f) {
         if (previousCursorPosition == null) {
@@ -45,6 +50,10 @@ class MouseManager(val app: SimpleApplication, val bluePrintManager: BluePrintMa
             speedY = currentPosition.y - previousCursorPosition!!.y
             previousCursorPosition = Vector2f(currentPosition)
         }
+    }
+
+    private fun getFloorCollision(): CollisionResult? {
+        return getCursorCollisions().find { it.geometry.name == "floor" }
     }
 
     private fun getCursorCollisions(): CollisionResults {

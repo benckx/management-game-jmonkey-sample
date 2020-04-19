@@ -13,6 +13,10 @@ class BluePrintManager(val app: SimpleApplication) {
 
     fun enable() {
         enabled = true
+
+        if (app.rootNode.getChild(BLUEPRINT_BLOCK) == null) {
+            create()
+        }
     }
 
     fun disable() {
@@ -34,7 +38,7 @@ class BluePrintManager(val app: SimpleApplication) {
     }
 
     private fun destroy() {
-        app.rootNode.detachChildNamed("blueprint")
+        app.rootNode.detachChildNamed(BLUEPRINT_BLOCK)
     }
 
     private fun posX() = position.first.toFloat()
@@ -42,12 +46,16 @@ class BluePrintManager(val app: SimpleApplication) {
 
     private fun makeBox(): Geometry {
         val box = Box(0.5f, 0.5f, 0.1f)
-        val key = "blueprint"
+        val key = BLUEPRINT_BLOCK
         val geometry = Geometry(key, box)
         geometry.move(posX(), posY(), 0f)
         val mat = Material(app.assetManager, "Common/MatDefs/Misc/Unshaded.j3md")
         mat.setColor("Color", ColorRGBA.Blue)
         geometry.material = mat
         return geometry
+    }
+
+    companion object {
+        const val BLUEPRINT_BLOCK = "BLUEPRINT_BLOCK"
     }
 }

@@ -6,8 +6,8 @@ import be.encelade.bricks.managers.BluePrintManager
 import be.encelade.bricks.managers.CameraManager
 import be.encelade.bricks.managers.MouseManager
 import com.jme3.app.SimpleApplication
-import com.jme3.input.KeyInput.KEY_ESCAPE
 import com.jme3.input.KeyInput.KEY_B
+import com.jme3.input.KeyInput.KEY_ESCAPE
 import com.jme3.input.MouseInput.AXIS_WHEEL
 import com.jme3.input.MouseInput.BUTTON_RIGHT
 import com.jme3.input.controls.KeyTrigger
@@ -36,8 +36,8 @@ class GameApp : SimpleApplication() {
         mouseManager = MouseManager(this, bluePrintManager)
         cameraManager = CameraManager(this, mouseManager)
 
-        val myAnalogListener = MyAnalogListener(bluePrintManager, cameraManager)
-        val myActionListener = MyActionListener(mouseManager)
+        val myAnalogListener = MyAnalogListener(cameraManager)
+        val myActionListener = MyActionListener(bluePrintManager, mouseManager)
 
         cameraManager.register()
         cameraManager.enableTopViewMode()
@@ -50,8 +50,8 @@ class GameApp : SimpleApplication() {
         inputManager.addMapping(WHEEL_DOWN, MouseAxisTrigger(AXIS_WHEEL, true))
         inputManager.addMapping(MOUSE_RIGHT_CLICK, MouseButtonTrigger(BUTTON_RIGHT))
 
-        inputManager.addListener(myAnalogListener, WHEEL_UP, WHEEL_DOWN, ESCAPE, "B")
-        inputManager.addListener(myActionListener, MOUSE_RIGHT_CLICK)
+        inputManager.addListener(myAnalogListener, WHEEL_UP, WHEEL_DOWN)
+        inputManager.addListener(myActionListener, MOUSE_RIGHT_CLICK, "B", ESCAPE)
 
         showOrigin()
         addFloor()
