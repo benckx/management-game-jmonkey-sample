@@ -1,9 +1,12 @@
 package be.encelade.bricks
 
 import com.jme3.app.SimpleApplication
+import com.jme3.input.MouseInput
 import com.jme3.input.MouseInput.AXIS_WHEEL
+import com.jme3.input.controls.ActionListener
 import com.jme3.input.controls.AnalogListener
 import com.jme3.input.controls.MouseAxisTrigger
+import com.jme3.input.controls.MouseButtonTrigger
 import com.jme3.material.Material
 import com.jme3.math.ColorRGBA
 import com.jme3.math.FastMath
@@ -29,8 +32,10 @@ class GameApp : SimpleApplication() {
 
         inputManager.addMapping("WHEEL_UP", MouseAxisTrigger(AXIS_WHEEL, false))
         inputManager.addMapping("WHEEL_DOWN", MouseAxisTrigger(AXIS_WHEEL, true))
+        inputManager.addMapping("MOUSE_RIGHT_CLICK", MouseButtonTrigger(MouseInput.BUTTON_RIGHT))
 
         inputManager.addListener(MyAnalogListener(this), "WHEEL_UP", "WHEEL_DOWN")
+        inputManager.addListener(MyActionListener(), "MOUSE_RIGHT_CLICK")
 
         showOrigin()
         addFloor()
@@ -39,10 +44,17 @@ class GameApp : SimpleApplication() {
     private fun cameraZoom(value: Float) {
         val delta = value * speed
         val currentZ = cameraNode.camera.location.z
-        val newZ = currentZ + delta
+        val targetZ = currentZ + delta
 
-        if (newZ > MIN_Z && newZ < MAX_Z) {
+        println("----")
+        println("delta: $delta")
+        println("currentZ: $currentZ")
+        println("targetZ: $targetZ")
+
+        if (targetZ > MIN_Z && targetZ < MAX_Z) {
             cameraNode.move(0f, 0f, delta)
+        } else {
+            println("not allowed")
         }
     }
 
@@ -54,6 +66,14 @@ class GameApp : SimpleApplication() {
                 else -> println("Unknown $name")
             }
         }
+    }
+
+    private class MyActionListener : ActionListener {
+
+        override fun onAction(name: String?, isPressed: Boolean, tpf: Float) {
+            println("is pressed: $isPressed")
+        }
+
     }
 
     private fun showOrigin() {
@@ -75,7 +95,7 @@ class GameApp : SimpleApplication() {
     }
 
     private fun enableTopViewMode() {
-        cameraNode.move(0f, 0f, 5f)
+        cameraNode.move(0f, 0f, 15f)
         cameraNode.rotate(FastMath.PI, 0f, 0f)
     }
 
