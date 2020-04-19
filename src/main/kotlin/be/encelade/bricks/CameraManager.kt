@@ -21,7 +21,7 @@ class CameraManager(val app: SimpleApplication) {
         updateCursorSpeed(app.inputManager.cursorPosition)
 
         if (rightClickPressed && (cursorSpeedX != 0f || cursorSpeedY != 0f)) {
-            val movementSpeed = BASE_SPEED_RATE * cameraNode.camera.location.z * tpf
+            val movementSpeed = CAMERA_SPEED * cameraNode.camera.location.z * tpf
             cameraNode.move(cursorSpeedX * movementSpeed, cursorSpeedY * movementSpeed, 0f)
         }
     }
@@ -46,18 +46,20 @@ class CameraManager(val app: SimpleApplication) {
         cameraNode.rotate(FastMath.PI * 0.8f, 0f, FastMath.PI * 0.8f)
     }
 
-    fun cameraZoom(delta: Float) {
+    fun cameraZoom(value: Float) {
         val currentZ = cameraNode.camera.location.z
-        val targetZ = currentZ + delta
+        val deltaZ = value * ZOOM_SPEED * currentZ
+        val targetZ = currentZ + deltaZ
 
         if (targetZ > MIN_Z && targetZ < MAX_Z) {
-            cameraNode.move(0f, 0f, delta)
+            cameraNode.move(0f, 0f, deltaZ)
         }
     }
 
     companion object {
 
-        const val BASE_SPEED_RATE = (1 / 60f)
+        const val CAMERA_SPEED = (1 / 60f)
+        const val ZOOM_SPEED = 2
 
         const val MIN_Z = 2
         const val MAX_Z = 40
