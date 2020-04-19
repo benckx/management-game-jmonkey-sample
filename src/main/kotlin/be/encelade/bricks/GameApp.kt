@@ -8,9 +8,7 @@ import be.encelade.bricks.managers.CameraManager.ViewMode.ISO_VIEW
 import be.encelade.bricks.managers.CameraManager.ViewMode.TOP_VIEW
 import be.encelade.bricks.managers.MouseManager
 import com.jme3.app.SimpleApplication
-import com.jme3.input.KeyInput.KEY_B
-import com.jme3.input.KeyInput.KEY_V
-import com.jme3.input.KeyInput.KEY_ESCAPE
+import com.jme3.input.KeyInput.*
 import com.jme3.input.MouseInput.AXIS_WHEEL
 import com.jme3.input.MouseInput.BUTTON_RIGHT
 import com.jme3.input.controls.KeyTrigger
@@ -37,7 +35,7 @@ class GameApp : SimpleApplication() {
 
         bluePrintManager = BluePrintManager(this)
         mouseManager = MouseManager(this, bluePrintManager)
-        cameraManager = CameraManager(this, mouseManager, ISO_VIEW)
+        cameraManager = CameraManager(this, mouseManager, TOP_VIEW)
 
         val myAnalogListener = MyAnalogListener(cameraManager)
         val myActionListener = MyActionListener(bluePrintManager, mouseManager)
