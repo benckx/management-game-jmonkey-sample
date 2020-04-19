@@ -4,16 +4,16 @@ import com.jme3.app.SimpleApplication
 import com.jme3.math.FastMath
 import com.jme3.scene.CameraNode
 
-class CameraManager(val app: SimpleApplication, val cursorManager: CursorManager) {
+class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager) {
 
     private val cameraNode = CameraNode("cameraNode", app.camera)
 
     fun register() = app.rootNode.attachChild(cameraNode)
 
     fun simpleUpdate(tpf: Float) {
-        if (cursorManager.rightClickPressed && cursorManager.isCursorMoving()) {
+        if (mouseManager.rightClickPressed && mouseManager.isCursorMoving()) {
             val movementSpeed = CAMERA_SPEED * cameraNode.camera.location.z
-            cameraNode.move(cursorManager.speedX * movementSpeed * tpf, cursorManager.speedY * movementSpeed * tpf, 0f)
+            cameraNode.move(mouseManager.speedX * movementSpeed * tpf, mouseManager.speedY * movementSpeed * tpf, 0f)
         }
     }
 
