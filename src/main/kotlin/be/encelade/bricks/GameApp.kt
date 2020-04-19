@@ -15,7 +15,6 @@ import com.jme3.scene.CameraNode
 import com.jme3.scene.Geometry
 import com.jme3.scene.shape.Box
 import com.jme3.scene.shape.Sphere
-import java.lang.System.currentTimeMillis
 
 class GameApp : SimpleApplication() {
 
@@ -37,7 +36,7 @@ class GameApp : SimpleApplication() {
         inputManager.addMapping("MOUSE_RIGHT_CLICK", MouseButtonTrigger(MouseInput.BUTTON_RIGHT))
 
         inputManager.addListener(MyAnalogListener(this), "WHEEL_UP", "WHEEL_DOWN")
-        inputManager.addListener(MyActionListener(), "MOUSE_RIGHT_CLICK")
+        inputManager.addListener(MyActionListener(this), "MOUSE_RIGHT_CLICK")
 
         showOrigin()
         addFloor()
@@ -60,30 +59,28 @@ class GameApp : SimpleApplication() {
         }
     }
 
-    private var time: Long = 0
     private var oldPosition: Vector2f? = null
     private var deltaX = 0f
     private var deltaY = 0f
+    private var rightClickPressed = false
 
     override fun simpleUpdate(tpf: Float) {
         val currentPosition = Vector2f(inputManager.cursorPosition)
 
         if (oldPosition == null) {
             oldPosition = currentPosition
-            time = currentTimeMillis()
         } else {
-            val timeDelta = currentTimeMillis() - time
-            if (timeDelta > 300) {
-                deltaX = currentPosition.x - oldPosition!!.x
-                deltaY = currentPosition.y - oldPosition!!.y
-                oldPosition = Vector2f(currentPosition)
-            }
+            deltaX = currentPosition.x - oldPosition!!.x
+            deltaY = currentPosition.y - oldPosition!!.y
+            oldPosition = Vector2f(currentPosition)
         }
 
-        if (deltaX != 0f || deltaY != 0f) {
-            println("${deltaX}, ${deltaY}")
-            val cursorSpeed = Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
-            println(cursorSpeed)
+        if (rightClickPressed) {
+            if (deltaX != 0f || deltaY != 0f) {
+                println("${deltaX}, ${deltaY}")
+                val rate = (1 / 50f) * cameraNode.camera.location.z * tpf
+                cameraNode.move(deltaX * rate, deltaY * rate, 0f)
+            }
         }
     }
 
@@ -97,10 +94,11 @@ class GameApp : SimpleApplication() {
         }
     }
 
-    private class MyActionListener : ActionListener {
+    private class MyActionListener(val parent: GameApp) : ActionListener {
 
         override fun onAction(name: String?, isPressed: Boolean, tpf: Float) {
             println("is pressed: $isPressed")
+            parent.rightClickPressed = isPressed
         }
 
     }
