@@ -4,7 +4,7 @@ import be.encelade.game.inputlisteners.MyActionListener
 import be.encelade.game.inputlisteners.MyAnalogListener
 import be.encelade.game.managers.BluePrintManager
 import be.encelade.game.managers.CameraManager
-import be.encelade.game.managers.CameraManager.ViewMode.*
+import be.encelade.game.managers.CameraManager.ViewMode.ISO_VIEW
 import be.encelade.game.managers.MouseManager
 import com.jme3.app.SimpleApplication
 import com.jme3.input.KeyInput.*
@@ -41,8 +41,8 @@ class GameApp : SimpleApplication() {
 
         inputManager.clearMappings()
 
-        inputManager.addMapping("B", KeyTrigger(KEY_B)) // TODO
-        inputManager.addMapping("V", KeyTrigger(KEY_V)) // TODO
+        inputManager.addMapping("B", KeyTrigger(KEY_B))
+        inputManager.addMapping("V", KeyTrigger(KEY_V))
         inputManager.addMapping(ESCAPE, KeyTrigger(KEY_ESCAPE))
         inputManager.addMapping(WHEEL_UP, MouseAxisTrigger(AXIS_WHEEL, false))
         inputManager.addMapping(WHEEL_DOWN, MouseAxisTrigger(AXIS_WHEEL, true))
