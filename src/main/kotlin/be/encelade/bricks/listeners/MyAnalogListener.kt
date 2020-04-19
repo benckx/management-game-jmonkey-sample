@@ -11,6 +11,7 @@ class MyAnalogListener(val bluePrintManager: BluePrintManager, val cameraManager
 
     override fun onAnalog(name: String?, value: Float, tpf: Float) {
         when (name) {
+            "B" -> bluePrintManager.enable()
             ESCAPE -> bluePrintManager.disable()
             WHEEL_UP -> cameraManager.cameraZoom(-value * tpf)
             WHEEL_DOWN -> cameraManager.cameraZoom(value * tpf)

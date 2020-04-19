@@ -7,6 +7,7 @@ import be.encelade.bricks.managers.CameraManager
 import be.encelade.bricks.managers.MouseManager
 import com.jme3.app.SimpleApplication
 import com.jme3.input.KeyInput.KEY_ESCAPE
+import com.jme3.input.KeyInput.KEY_B
 import com.jme3.input.MouseInput.AXIS_WHEEL
 import com.jme3.input.MouseInput.BUTTON_RIGHT
 import com.jme3.input.controls.KeyTrigger
@@ -43,12 +44,13 @@ class GameApp : SimpleApplication() {
 
         inputManager.clearMappings()
 
+        inputManager.addMapping("B", KeyTrigger(KEY_B)) // TODO
         inputManager.addMapping(ESCAPE, KeyTrigger(KEY_ESCAPE))
         inputManager.addMapping(WHEEL_UP, MouseAxisTrigger(AXIS_WHEEL, false))
         inputManager.addMapping(WHEEL_DOWN, MouseAxisTrigger(AXIS_WHEEL, true))
         inputManager.addMapping(MOUSE_RIGHT_CLICK, MouseButtonTrigger(BUTTON_RIGHT))
 
-        inputManager.addListener(myAnalogListener, WHEEL_UP, WHEEL_DOWN, ESCAPE)
+        inputManager.addListener(myAnalogListener, WHEEL_UP, WHEEL_DOWN, ESCAPE, "B")
         inputManager.addListener(myActionListener, MOUSE_RIGHT_CLICK)
 
         showOrigin()
