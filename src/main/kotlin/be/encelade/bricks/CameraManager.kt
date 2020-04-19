@@ -42,6 +42,11 @@ class CameraManager(val app: SimpleApplication) {
         cameraNode.rotate(FastMath.PI, 0f, 0f)
     }
 
+    fun enableIsoViewMode() {
+        cameraNode.move(0f, 0f, 15f)
+        cameraNode.rotate(FastMath.PI * 0.8f, 0f, FastMath.PI * 0.8f)
+    }
+
     fun cameraZoom(delta: Float) {
         val currentZ = cameraNode.camera.location.z
         val targetZ = currentZ + delta

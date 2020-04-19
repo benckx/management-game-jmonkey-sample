@@ -18,7 +18,8 @@ import com.jme3.scene.shape.Sphere
 
 class GameApp : SimpleApplication() {
 
-    private lateinit var cameraNode: CameraNode
+//    private lateinit var cameraNode: CameraNode
+    private lateinit var cameraManager: CameraManager
 
     override fun simpleInitApp() {
         setDisplayFps(true)
@@ -27,65 +28,31 @@ class GameApp : SimpleApplication() {
         flyCam.setEnabled(false)
         inputManager.setCursorVisible(true)
 
-        cameraNode = CameraNode("cameraNode", cam)
-        rootNode.attachChild(cameraNode)
-        enableTopViewMode()
+//        cameraNode = CameraNode("cameraNode", cam)
+//        rootNode.attachChild(cameraNode)
+//        enableTopViewMode()
 //        enableIsoViewMode()
+
+        cameraManager = CameraManager(this)
+        cameraManager.register()
+        cameraManager.enableTopViewMode()
 
         inputManager.addMapping("WHEEL_UP", MouseAxisTrigger(AXIS_WHEEL, false))
         inputManager.addMapping("WHEEL_DOWN", MouseAxisTrigger(AXIS_WHEEL, true))
         inputManager.addMapping("MOUSE_RIGHT_CLICK", MouseButtonTrigger(MouseInput.BUTTON_RIGHT))
 
-        inputManager.addListener(MyAnalogListener(this), "WHEEL_UP", "WHEEL_DOWN")
-        inputManager.addListener(MyActionListener(this), "MOUSE_RIGHT_CLICK")
+        inputManager.addListener(MyAnalogListener(cameraManager), "WHEEL_UP", "WHEEL_DOWN")
+        inputManager.addListener(MyActionListener(cameraManager), "MOUSE_RIGHT_CLICK")
 
         showOrigin()
         addFloor()
     }
 
-    private fun cameraZoom(value: Float) {
-        val delta = value
-        val currentZ = cameraNode.camera.location.z
-        val targetZ = currentZ + delta
-
-        println("----")
-        println("delta: $delta")
-        println("currentZ: $currentZ")
-        println("targetZ: $targetZ")
-
-        if (targetZ > MIN_Z && targetZ < MAX_Z) {
-            cameraNode.move(0f, 0f, delta)
-        } else {
-            println("not allowed")
-        }
-    }
-
-    private var oldPosition: Vector2f? = null
-    private var deltaX = 0f
-    private var deltaY = 0f
-    private var rightClickPressed = false
-
     override fun simpleUpdate(tpf: Float) {
-        val currentPosition = Vector2f(inputManager.cursorPosition)
-
-        if (oldPosition == null) {
-            oldPosition = currentPosition
-        } else {
-            deltaX = currentPosition.x - oldPosition!!.x
-            deltaY = currentPosition.y - oldPosition!!.y
-            oldPosition = Vector2f(currentPosition)
-        }
-
-        if (rightClickPressed) {
-            if (deltaX != 0f || deltaY != 0f) {
-                println("${deltaX}, ${deltaY}")
-                val rate = (1 / 70f) * cameraNode.camera.location.z * tpf
-                cameraNode.move(deltaX * rate, deltaY * rate, 0f)
-            }
-        }
+        cameraManager.simpleUpdate(tpf)
     }
 
-    private class MyAnalogListener(val parent: GameApp) : AnalogListener {
+    private class MyAnalogListener(val parent: CameraManager) : AnalogListener {
         override fun onAnalog(name: String?, value: Float, tpf: Float) {
             when (name) {
                 "WHEEL_UP" -> parent.cameraZoom(-value)
@@ -95,10 +62,9 @@ class GameApp : SimpleApplication() {
         }
     }
 
-    private class MyActionListener(val parent: GameApp) : ActionListener {
+    private class MyActionListener(val parent: CameraManager) : ActionListener {
 
         override fun onAction(name: String?, isPressed: Boolean, tpf: Float) {
-            println("is pressed: $isPressed")
             parent.rightClickPressed = isPressed
         }
 
@@ -122,15 +88,15 @@ class GameApp : SimpleApplication() {
         rootNode.attachChild(floor)
     }
 
-    private fun enableTopViewMode() {
-        cameraNode.move(0f, 0f, 15f)
-        cameraNode.rotate(FastMath.PI, 0f, 0f)
-    }
-
-    fun enableIsoViewMode() {
-        cameraNode.move(0f, 0f, 15f)
-        cameraNode.rotate(FastMath.PI * 0.8f, 0f, FastMath.PI * 0.8f)
-    }
+//    private fun enableTopViewMode() {
+//        cameraNode.move(0f, 0f, 15f)
+//        cameraNode.rotate(FastMath.PI, 0f, 0f)
+//    }
+//
+//    fun enableIsoViewMode() {
+//        cameraNode.move(0f, 0f, 15f)
+//        cameraNode.rotate(FastMath.PI * 0.8f, 0f, FastMath.PI * 0.8f)
+//    }
 
     companion object {
 
