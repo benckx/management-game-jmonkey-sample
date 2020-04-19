@@ -1,6 +1,6 @@
 package be.encelade.bricks.listeners
 
-import be.encelade.bricks.MouseManager
+import be.encelade.bricks.managers.MouseManager
 import com.jme3.input.controls.ActionListener
 
 class MyActionListener(val mouseManager: MouseManager) : ActionListener {

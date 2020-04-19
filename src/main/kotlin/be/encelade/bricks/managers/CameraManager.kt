@@ -1,4 +1,4 @@
-package be.encelade.bricks
+package be.encelade.bricks.managers
 
 import com.jme3.app.SimpleApplication
 import com.jme3.math.FastMath
@@ -13,13 +13,14 @@ class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager) 
     fun simpleUpdate(tpf: Float) {
         if (mouseManager.rightClickPressed && mouseManager.isCursorMoving()) {
             val movementSpeed = CAMERA_SPEED * cameraNode.camera.location.z
-            cameraNode.move(mouseManager.speedX * movementSpeed * tpf, mouseManager.speedY * movementSpeed * tpf, 0f)
+            cameraNode.move(-mouseManager.speedX * movementSpeed * tpf, -mouseManager.speedY * movementSpeed * tpf, 0f)
         }
     }
 
     fun enableTopViewMode() {
         cameraNode.move(0f, 0f, 15f)
         cameraNode.rotate(FastMath.PI, 0f, 0f)
+        cameraNode.rotate(0f, 0f, FastMath.PI)
     }
 
     fun enableIsoViewMode() {

@@ -2,9 +2,14 @@ package be.encelade.bricks
 
 import be.encelade.bricks.listeners.MyActionListener
 import be.encelade.bricks.listeners.MyAnalogListener
+import be.encelade.bricks.managers.BluePrintManager
+import be.encelade.bricks.managers.CameraManager
+import be.encelade.bricks.managers.MouseManager
 import com.jme3.app.SimpleApplication
+import com.jme3.input.KeyInput.KEY_ESCAPE
 import com.jme3.input.MouseInput.AXIS_WHEEL
 import com.jme3.input.MouseInput.BUTTON_RIGHT
+import com.jme3.input.controls.KeyTrigger
 import com.jme3.input.controls.MouseAxisTrigger
 import com.jme3.input.controls.MouseButtonTrigger
 import com.jme3.material.Material
@@ -15,6 +20,7 @@ import com.jme3.scene.shape.Sphere
 
 class GameApp : SimpleApplication() {
 
+    private lateinit var bluePrintManager: BluePrintManager
     private lateinit var mouseManager: MouseManager
     private lateinit var cameraManager: CameraManager
 
@@ -25,18 +31,25 @@ class GameApp : SimpleApplication() {
         flyCam.setEnabled(false)
         inputManager.setCursorVisible(true)
 
-        mouseManager = MouseManager(this)
-
+        bluePrintManager = BluePrintManager(this)
+        mouseManager = MouseManager(this, bluePrintManager)
         cameraManager = CameraManager(this, mouseManager)
+
+        val myAnalogListener = MyAnalogListener(bluePrintManager, cameraManager)
+        val myActionListener = MyActionListener(mouseManager)
+
         cameraManager.register()
         cameraManager.enableTopViewMode()
 
+        inputManager.clearMappings()
+
+        inputManager.addMapping(ESCAPE, KeyTrigger(KEY_ESCAPE))
         inputManager.addMapping(WHEEL_UP, MouseAxisTrigger(AXIS_WHEEL, false))
         inputManager.addMapping(WHEEL_DOWN, MouseAxisTrigger(AXIS_WHEEL, true))
         inputManager.addMapping(MOUSE_RIGHT_CLICK, MouseButtonTrigger(BUTTON_RIGHT))
 
-        inputManager.addListener(MyAnalogListener(cameraManager), WHEEL_UP, WHEEL_DOWN)
-        inputManager.addListener(MyActionListener(mouseManager), MOUSE_RIGHT_CLICK)
+        inputManager.addListener(myAnalogListener, WHEEL_UP, WHEEL_DOWN, ESCAPE)
+        inputManager.addListener(myActionListener, MOUSE_RIGHT_CLICK)
 
         showOrigin()
         addFloor()
@@ -70,6 +83,7 @@ class GameApp : SimpleApplication() {
         const val WHEEL_UP = "WHEEL_UP"
         const val WHEEL_DOWN = "WHEEL_DOWN"
         const val MOUSE_RIGHT_CLICK = "MOUSE_RIGHT_CLICK"
+        const val ESCAPE = "ESCAPE"
 
     }
 }
