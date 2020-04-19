@@ -10,10 +10,12 @@ import com.jme3.input.controls.MouseButtonTrigger
 import com.jme3.material.Material
 import com.jme3.math.ColorRGBA
 import com.jme3.math.FastMath
+import com.jme3.math.Vector2f
 import com.jme3.scene.CameraNode
 import com.jme3.scene.Geometry
 import com.jme3.scene.shape.Box
 import com.jme3.scene.shape.Sphere
+import java.lang.System.currentTimeMillis
 
 class GameApp : SimpleApplication() {
 
@@ -55,6 +57,33 @@ class GameApp : SimpleApplication() {
             cameraNode.move(0f, 0f, delta)
         } else {
             println("not allowed")
+        }
+    }
+
+    private var time: Long = 0
+    private var oldPosition: Vector2f? = null
+    private var deltaX = 0f
+    private var deltaY = 0f
+
+    override fun simpleUpdate(tpf: Float) {
+        val currentPosition = Vector2f(inputManager.cursorPosition)
+
+        if (oldPosition == null) {
+            oldPosition = currentPosition
+            time = currentTimeMillis()
+        } else {
+            val timeDelta = currentTimeMillis() - time
+            if (timeDelta > 300) {
+                deltaX = currentPosition.x - oldPosition!!.x
+                deltaY = currentPosition.y - oldPosition!!.y
+                oldPosition = Vector2f(currentPosition)
+            }
+        }
+
+        if (deltaX != 0f || deltaY != 0f) {
+            println("${deltaX}, ${deltaY}")
+            val cursorSpeed = Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())
+            println(cursorSpeed)
         }
     }
 
