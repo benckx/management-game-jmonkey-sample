@@ -12,8 +12,8 @@ class MouseManager(val app: SimpleApplication, val bluePrintManager: BluePrintMa
 
     private var previousCursorPosition: Vector2f? = null
 
-    var speedX = 0f
-    var speedY = 0f
+    var deltaX = 0f
+    var deltaY = 0f
     var rightClickPressed = false
 
     var floorPosition = Pair(0, 0)
@@ -26,7 +26,7 @@ class MouseManager(val app: SimpleApplication, val bluePrintManager: BluePrintMa
         }
     }
 
-    fun isCursorMoving() = speedX != 0f || speedY != 0f
+    fun isCursorMoving() = deltaX != 0f || deltaY != 0f
 
     private fun updateCursorPositionOnTheFloor() {
         val floorCollision = getFloorCollision()
@@ -46,8 +46,8 @@ class MouseManager(val app: SimpleApplication, val bluePrintManager: BluePrintMa
         if (previousCursorPosition == null) {
             previousCursorPosition = currentPosition
         } else {
-            speedX = currentPosition.x - previousCursorPosition!!.x
-            speedY = currentPosition.y - previousCursorPosition!!.y
+            deltaX = currentPosition.x - previousCursorPosition!!.x
+            deltaY = currentPosition.y - previousCursorPosition!!.y
             previousCursorPosition = Vector2f(currentPosition)
         }
     }

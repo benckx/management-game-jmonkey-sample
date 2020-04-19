@@ -41,6 +41,7 @@ class GameApp : SimpleApplication() {
 
         cameraManager.register()
         cameraManager.enableTopViewMode()
+//        cameraManager.enableIsoViewMode()
 
         inputManager.clearMappings()
 
