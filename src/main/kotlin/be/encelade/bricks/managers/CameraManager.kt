@@ -4,7 +4,6 @@ import be.encelade.bricks.managers.CameraManager.ViewMode.ISO_VIEW
 import be.encelade.bricks.managers.CameraManager.ViewMode.TOP_VIEW
 import com.jme3.app.SimpleApplication
 import com.jme3.math.FastMath
-import com.jme3.math.Quaternion
 import com.jme3.math.Vector3f
 import com.jme3.scene.CameraNode
 
@@ -52,16 +51,13 @@ class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager, 
         }
     }
 
-    fun enableTopViewMode() {
+    private fun enableTopViewMode() {
         viewMode = TOP_VIEW
-        resetRotation()
-        cameraNode.camera.rotation = Quaternion()
         cameraNode.rotate(FastMath.PI, 0f, FastMath.PI)
     }
 
-    fun enableIsoViewMode() {
+    private fun enableIsoViewMode() {
         viewMode = ISO_VIEW
-        resetRotation()
         cameraNode.rotate(FastMath.PI, 0f, FastMath.PI) // top view
         cameraNode.rotate(-FastMath.QUARTER_PI, 0f, FastMath.QUARTER_PI)
     }
@@ -79,10 +75,6 @@ class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager, 
 
             cameraNode.move(cameraMovement)
         }
-    }
-
-    private fun resetRotation() {
-        cameraNode.camera.rotation = Quaternion()
     }
 
     enum class ViewMode {

@@ -28,7 +28,6 @@ class BluePrintManager(val app: SimpleApplication) {
         position = Pair(x, y)
 
         if (enabled) {
-            println("blueprint at $position")
             destroy()
             create()
         }

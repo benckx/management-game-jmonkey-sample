@@ -13,6 +13,7 @@ class MyActionListener(val bluePrintManager: BluePrintManager, val mouseManager:
             "B" -> bluePrintManager.enable()
             ESCAPE -> bluePrintManager.disable()
             MOUSE_RIGHT_CLICK -> mouseManager.rightClickPressed = isPressed
+            "V" -> println("pressed V")
             else -> println("Unknown $name")
         }
     }

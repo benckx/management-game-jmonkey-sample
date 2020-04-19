@@ -9,6 +9,7 @@ import be.encelade.bricks.managers.CameraManager.ViewMode.TOP_VIEW
 import be.encelade.bricks.managers.MouseManager
 import com.jme3.app.SimpleApplication
 import com.jme3.input.KeyInput.KEY_B
+import com.jme3.input.KeyInput.KEY_V
 import com.jme3.input.KeyInput.KEY_ESCAPE
 import com.jme3.input.MouseInput.AXIS_WHEEL
 import com.jme3.input.MouseInput.BUTTON_RIGHT
@@ -44,13 +45,14 @@ class GameApp : SimpleApplication() {
         inputManager.clearMappings()
 
         inputManager.addMapping("B", KeyTrigger(KEY_B)) // TODO
+        inputManager.addMapping("V", KeyTrigger(KEY_V)) // TODO
         inputManager.addMapping(ESCAPE, KeyTrigger(KEY_ESCAPE))
         inputManager.addMapping(WHEEL_UP, MouseAxisTrigger(AXIS_WHEEL, false))
         inputManager.addMapping(WHEEL_DOWN, MouseAxisTrigger(AXIS_WHEEL, true))
         inputManager.addMapping(MOUSE_RIGHT_CLICK, MouseButtonTrigger(BUTTON_RIGHT))
 
         inputManager.addListener(myAnalogListener, WHEEL_UP, WHEEL_DOWN)
-        inputManager.addListener(myActionListener, MOUSE_RIGHT_CLICK, "B", ESCAPE)
+        inputManager.addListener(myActionListener, MOUSE_RIGHT_CLICK, "B", ESCAPE, "V")
 
         showOrigin()
         addFloor()
@@ -71,7 +73,7 @@ class GameApp : SimpleApplication() {
 
     private fun addFloor() {
         // replace Box by Surface
-        val size = 5f
+        val size = 5.5f
         val floor = Geometry("floor", Box(size, size, 0.01f))
         val mat = Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md")
         mat.setColor("Color", ColorRGBA.Gray)
