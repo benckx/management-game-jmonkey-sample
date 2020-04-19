@@ -15,4 +15,5 @@ Features include:
 ![](images/screen.png)
 
 # How To
-Simply run the main class.
+* Build with `./gradlew clean build`
+* Run the main class
