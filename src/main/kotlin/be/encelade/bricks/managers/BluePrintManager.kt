@@ -48,7 +48,7 @@ class BluePrintManager(val app: SimpleApplication) {
         val box = Box(0.5f, 0.5f, 0.1f)
         val key = BLUEPRINT_BLOCK
         val geometry = Geometry(key, box)
-        geometry.move(posX(), posY(), 0f)
+        geometry.move(posX(), posY(), 0.1f)
         val mat = Material(app.assetManager, "Common/MatDefs/Misc/Unshaded.j3md")
         mat.setColor("Color", ColorRGBA.Blue)
         geometry.material = mat
@@ -56,6 +56,8 @@ class BluePrintManager(val app: SimpleApplication) {
     }
 
     companion object {
+
         const val BLUEPRINT_BLOCK = "BLUEPRINT_BLOCK"
+
     }
 }
