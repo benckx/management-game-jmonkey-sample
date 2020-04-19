@@ -4,12 +4,25 @@ import be.encelade.bricks.managers.CameraManager.ViewMode.ISO_VIEW
 import be.encelade.bricks.managers.CameraManager.ViewMode.TOP_VIEW
 import com.jme3.app.SimpleApplication
 import com.jme3.math.FastMath
+import com.jme3.math.Quaternion
 import com.jme3.scene.CameraNode
 
-class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager) {
+class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager, var viewMode: ViewMode) {
 
-    private lateinit var viewMode: ViewMode
     private val cameraNode = CameraNode("cameraNode", app.camera)
+
+    init {
+        when (viewMode) {
+            TOP_VIEW -> {
+                cameraNode.move(0f, 0f, 15f)
+                enableTopViewMode()
+            }
+            ISO_VIEW -> {
+                cameraNode.move(-10f, -10f, 15f)
+                enableIsoViewMode()
+            }
+        }
+    }
 
     fun register() = app.rootNode.attachChild(cameraNode)
 
@@ -36,15 +49,16 @@ class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager) 
 
     fun enableTopViewMode() {
         viewMode = TOP_VIEW
-        cameraNode.move(0f, 0f, 15f)
+        resetRotation()
+        cameraNode.camera.rotation = Quaternion()
         cameraNode.rotate(FastMath.PI, 0f, FastMath.PI)
     }
 
     fun enableIsoViewMode() {
-        enableTopViewMode()
         viewMode = ISO_VIEW
-//        cameraNode.rotate(-FastMath.QUARTER_PI, 0f, FastMath.QUARTER_PI)
-        cameraNode.rotate(0f, 0f, FastMath.QUARTER_PI)
+        resetRotation()
+        cameraNode.rotate(FastMath.PI, 0f, FastMath.PI) // top view
+        cameraNode.rotate(-FastMath.QUARTER_PI, 0f, FastMath.QUARTER_PI)
     }
 
     fun cameraZoom(value: Float) {
@@ -53,11 +67,18 @@ class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager) 
         val targetZ = currentZ + deltaZ
 
         if (targetZ > MIN_Z && targetZ < MAX_Z) {
-            cameraNode.move(0f, 0f, deltaZ)
+            when (viewMode) {
+                TOP_VIEW -> cameraNode.move(0f, 0f, deltaZ)
+                ISO_VIEW -> cameraNode.move(-deltaZ / 2, -deltaZ / 2, deltaZ)
+            }
         }
     }
 
-    private enum class ViewMode {
+    private fun resetRotation() {
+        cameraNode.camera.rotation = Quaternion()
+    }
+
+    enum class ViewMode {
         TOP_VIEW, ISO_VIEW
     }
 

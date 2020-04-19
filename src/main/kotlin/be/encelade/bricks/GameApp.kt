@@ -4,6 +4,8 @@ import be.encelade.bricks.listeners.MyActionListener
 import be.encelade.bricks.listeners.MyAnalogListener
 import be.encelade.bricks.managers.BluePrintManager
 import be.encelade.bricks.managers.CameraManager
+import be.encelade.bricks.managers.CameraManager.ViewMode.ISO_VIEW
+import be.encelade.bricks.managers.CameraManager.ViewMode.TOP_VIEW
 import be.encelade.bricks.managers.MouseManager
 import com.jme3.app.SimpleApplication
 import com.jme3.input.KeyInput.KEY_B
@@ -34,14 +36,12 @@ class GameApp : SimpleApplication() {
 
         bluePrintManager = BluePrintManager(this)
         mouseManager = MouseManager(this, bluePrintManager)
-        cameraManager = CameraManager(this, mouseManager)
+        cameraManager = CameraManager(this, mouseManager, ISO_VIEW)
 
         val myAnalogListener = MyAnalogListener(cameraManager)
         val myActionListener = MyActionListener(bluePrintManager, mouseManager)
 
         cameraManager.register()
-        cameraManager.enableTopViewMode()
-//        cameraManager.enableIsoViewMode()
 
         inputManager.clearMappings()
 
