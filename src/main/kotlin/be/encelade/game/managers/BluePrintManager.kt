@@ -11,12 +11,16 @@ class BluePrintManager(val app: SimpleApplication) {
     private var enabled = false
     private var position = Pair(0, 0)
 
+    private val mat: Material
+
+    init {
+        mat = Material(app.assetManager, "Common/MatDefs/Misc/Unshaded.j3md")
+        mat.setColor("Color", ColorRGBA.Blue)
+    }
+
     fun enable() {
         enabled = true
-
-        if (app.rootNode.getChild(BLUEPRINT_BLOCK) == null) {
-            create()
-        }
+        create()
     }
 
     fun disable() {
@@ -30,7 +34,7 @@ class BluePrintManager(val app: SimpleApplication) {
         if (enabled) {
             destroy()
             create()
-            println("position: $position")
+            println("blueprint: $position")
         }
     }
 
@@ -46,11 +50,8 @@ class BluePrintManager(val app: SimpleApplication) {
     private fun posY() = position.second.toFloat()
 
     private fun makeBox(): Geometry {
-        val box = Box(0.5f, 0.5f, 0.1f)
-        val geometry = Geometry(BLUEPRINT_BLOCK, box)
+        val geometry = Geometry(BLUEPRINT_BLOCK, Box(0.5f, 0.5f, 0.1f))
         geometry.move(posX(), posY(), 0.1f)
-        val mat = Material(app.assetManager, "Common/MatDefs/Misc/Unshaded.j3md")
-        mat.setColor("Color", ColorRGBA.Blue)
         geometry.material = mat
         return geometry
     }
