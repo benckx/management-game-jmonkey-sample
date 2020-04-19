@@ -1,8 +1,8 @@
-package be.encelade.bricks.listeners
+package be.encelade.game.inputlisteners
 
-import be.encelade.bricks.GameApp.Companion.WHEEL_DOWN
-import be.encelade.bricks.GameApp.Companion.WHEEL_UP
-import be.encelade.bricks.managers.CameraManager
+import be.encelade.game.GameApp.Companion.WHEEL_DOWN
+import be.encelade.game.GameApp.Companion.WHEEL_UP
+import be.encelade.game.managers.CameraManager
 import com.jme3.input.controls.AnalogListener
 
 class MyAnalogListener(val cameraManager: CameraManager) : AnalogListener {

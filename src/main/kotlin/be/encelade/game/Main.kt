@@ -1,4 +1,4 @@
-package be.encelade.bricks
+package be.encelade.game
 
 import com.jme3.system.AppSettings
 

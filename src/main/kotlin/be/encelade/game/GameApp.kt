@@ -1,12 +1,11 @@
-package be.encelade.bricks
+package be.encelade.game
 
-import be.encelade.bricks.listeners.MyActionListener
-import be.encelade.bricks.listeners.MyAnalogListener
-import be.encelade.bricks.managers.BluePrintManager
-import be.encelade.bricks.managers.CameraManager
-import be.encelade.bricks.managers.CameraManager.ViewMode.ISO_VIEW
-import be.encelade.bricks.managers.CameraManager.ViewMode.TOP_VIEW
-import be.encelade.bricks.managers.MouseManager
+import be.encelade.game.inputlisteners.MyActionListener
+import be.encelade.game.inputlisteners.MyAnalogListener
+import be.encelade.game.managers.BluePrintManager
+import be.encelade.game.managers.CameraManager
+import be.encelade.game.managers.CameraManager.ViewMode.TOP_VIEW
+import be.encelade.game.managers.MouseManager
 import com.jme3.app.SimpleApplication
 import com.jme3.input.KeyInput.*
 import com.jme3.input.MouseInput.AXIS_WHEEL

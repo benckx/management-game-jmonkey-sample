@@ -1,4 +1,4 @@
-package be.encelade.bricks.managers
+package be.encelade.game.managers
 
 import com.jme3.app.SimpleApplication
 import com.jme3.collision.CollisionResult

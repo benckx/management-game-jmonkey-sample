@@ -1,13 +1,13 @@
-package be.encelade.bricks.managers
+package be.encelade.game.managers
 
-import be.encelade.bricks.managers.CameraManager.ViewMode.ISO_VIEW
-import be.encelade.bricks.managers.CameraManager.ViewMode.TOP_VIEW
+import be.encelade.game.managers.CameraManager.ViewMode.ISO_VIEW
+import be.encelade.game.managers.CameraManager.ViewMode.TOP_VIEW
 import com.jme3.app.SimpleApplication
 import com.jme3.math.FastMath
 import com.jme3.math.Vector3f
 import com.jme3.scene.CameraNode
 
-class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager, var viewMode: ViewMode) {
+class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var viewMode: ViewMode) {
 
     private val cameraNode = CameraNode("cameraNode", app.camera)
 

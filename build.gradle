@@ -10,7 +10,6 @@ buildscript {
 
 apply plugin: 'kotlin'
 apply plugin: 'idea'
-apply plugin: 'java'
 
 repositories {
     mavenCentral()
@@ -31,6 +30,4 @@ dependencies {
     compile "org.jmonkeyengine:jme3-core:$jmeVersion"
     compile "org.jmonkeyengine:jme3-desktop:$jmeVersion"
     compile "org.jmonkeyengine:jme3-lwjgl:$jmeVersion"
-
-    compile "joda-time:joda-time:2.7"
 }
