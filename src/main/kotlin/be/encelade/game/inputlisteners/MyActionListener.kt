@@ -10,12 +10,15 @@ import com.jme3.input.controls.ActionListener
 class MyActionListener(val bluePrintManager: BluePrintManager, val mouseManager: MouseManager, val cameraManager: CameraManager) : ActionListener {
 
     override fun onAction(name: String?, isPressed: Boolean, tpf: Float) {
-        when (name) {
-            "B" -> bluePrintManager.enable()
-            ESCAPE -> bluePrintManager.disable()
-            MOUSE_RIGHT_CLICK -> mouseManager.rightClickPressed = isPressed
-            "V" -> cameraManager.switchView()
-            else -> println("Unknown $name")
+        if (name == MOUSE_RIGHT_CLICK) {
+            mouseManager.rightClickPressed = isPressed
+        } else if (isPressed) {
+            when (name) {
+                "B" -> bluePrintManager.enable()
+                ESCAPE -> bluePrintManager.disable()
+                "V" -> cameraManager.switchViewMode()
+                else -> println("Unknown $name")
+            }
         }
     }
 

@@ -34,7 +34,7 @@ class GameApp : SimpleApplication() {
 
         bluePrintManager = BluePrintManager(this)
         mouseManager = MouseManager(this, bluePrintManager)
-        cameraManager = CameraManager(this, mouseManager, TOP_VIEW)
+        cameraManager = CameraManager(this, mouseManager, ISO_VIEW)
 
         val myAnalogListener = MyAnalogListener(cameraManager)
         val myActionListener = MyActionListener(bluePrintManager, mouseManager, cameraManager)

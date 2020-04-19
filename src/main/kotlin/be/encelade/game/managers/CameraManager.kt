@@ -2,36 +2,36 @@ package be.encelade.game.managers
 
 import be.encelade.game.managers.CameraManager.ViewMode.*
 import com.jme3.app.SimpleApplication
-import com.jme3.math.FastMath
 import com.jme3.math.FastMath.PI
 import com.jme3.math.FastMath.QUARTER_PI
 import com.jme3.math.Vector3f
 import com.jme3.scene.CameraNode
 
-class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var viewMode: ViewMode) {
+class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager, var viewMode: ViewMode) {
 
-    private val cameraNode = CameraNode("cameraNode", app.camera)
-
-    init {
-        val rotation = rotationFor(viewMode)
-        cameraNode.rotate(rotation.x, rotation.y, rotation.z)
-        cameraNode.move(baseLocationFor(viewMode))
-        app.rootNode.attachChild(cameraNode)
-    }
-
-    fun switchView() {
-        val currentAngle = rotationFor(viewMode)
-        cameraNode.rotate(-currentAngle.x, -currentAngle.y, -currentAngle.z)
-
-        val newMode = viewMode.next()
-        val newAngle = rotationFor(newMode)
-        cameraNode.rotate(newAngle.x, newAngle.y, newAngle.z)
-    }
+    private var cameraNode: CameraNode = resetCameraNode(viewMode)
 
     fun simpleUpdate(tpf: Float) {
         if (mouseManager.rightClickPressed && mouseManager.isCursorMoving()) {
             rightClickMovement(tpf)
         }
+    }
+
+    fun switchViewMode() {
+        val newMode = viewMode.next()
+        resetCameraNode(newMode)
+        this.viewMode = newMode
+    }
+
+    private fun resetCameraNode(viewMode: ViewMode): CameraNode {
+        app.rootNode.detachChildNamed(CAMERA_NODE)
+        cameraNode = CameraNode(CAMERA_NODE, app.camera)
+        val rotation = rotationFor(viewMode)
+        cameraNode.rotate(rotation.x, rotation.y, rotation.z)
+        cameraNode.camera.location = Vector3f(0f, 0f, 0f)
+        cameraNode.move(baseLocationFor(viewMode))
+        app.rootNode.attachChild(cameraNode)
+        return cameraNode
     }
 
     private fun rightClickMovement(tpf: Float) {
@@ -57,14 +57,6 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
         cameraNode.move(cameraMovement)
     }
 
-    fun rotationFor(viewMode: ViewMode): Vector3f {
-        return when (viewMode) {
-            TOP_VIEW -> Vector3f(PI, 0f, PI)
-            SIDE_VIEW -> Vector3f(PI * 0.75f, 0f, PI)
-            ISO_VIEW -> Vector3f(QUARTER_PI * 3f, 0f, QUARTER_PI * 3f)
-        }
-    }
-
     fun cameraZoom(value: Float) {
         val currentZ = cameraNode.camera.location.z
         val deltaZ = value * ZOOM_SPEED * currentZ
@@ -85,18 +77,14 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
         TOP_VIEW, SIDE_VIEW, ISO_VIEW;
 
         fun next(): ViewMode {
-            val idx =
-                    if (ordinal == values().size - 1) {
-                        0
-                    } else {
-                        ordinal + 1
-                    }
-
+            val idx = if (ordinal == values().size - 1) 0 else ordinal + 1
             return values()[idx]
         }
     }
 
-    companion object {
+    private companion object {
+
+        const val CAMERA_NODE = "CAMERA_NODE"
 
         const val CAMERA_SPEED = 0.02f
         const val ZOOM_SPEED = 2
@@ -109,6 +97,14 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
                 TOP_VIEW -> Vector3f(0f, 0f, 15f)
                 SIDE_VIEW -> Vector3f(0f, -15f, 15f)
                 ISO_VIEW -> Vector3f(-10f, -10f, 15f)
+            }
+        }
+
+        private fun rotationFor(viewMode: ViewMode): Vector3f {
+            return when (viewMode) {
+                TOP_VIEW -> Vector3f(PI, 0f, PI)
+                SIDE_VIEW -> Vector3f(PI * 0.75f, 0f, PI)
+                ISO_VIEW -> Vector3f(QUARTER_PI * 3f, 0f, QUARTER_PI * 3f)
             }
         }
     }
