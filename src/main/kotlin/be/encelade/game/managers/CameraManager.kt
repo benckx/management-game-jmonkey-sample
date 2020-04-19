@@ -1,7 +1,6 @@
 package be.encelade.game.managers
 
-import be.encelade.game.managers.CameraManager.ViewMode.ISO_VIEW
-import be.encelade.game.managers.CameraManager.ViewMode.TOP_VIEW
+import be.encelade.game.managers.CameraManager.ViewMode.*
 import com.jme3.app.SimpleApplication
 import com.jme3.math.FastMath
 import com.jme3.math.Vector3f
@@ -13,16 +12,12 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
 
     init {
         when (viewMode) {
-            TOP_VIEW -> {
-                cameraNode.move(0f, 0f, 15f)
-                enableTopViewMode()
-            }
-            ISO_VIEW -> {
-                cameraNode.move(-10f, -10f, 15f)
-                enableIsoViewMode()
-            }
+            TOP_VIEW -> enableTopView()
+            SIDE_VIEW -> enableSideView()
+            ISO_VIEW -> enableIsoView()
         }
 
+        cameraNode.move(baseLocationFor(viewMode))
         app.rootNode.attachChild(cameraNode)
     }
 
@@ -38,7 +33,7 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
         val movementSpeed = CAMERA_SPEED * cameraNode.camera.location.z
 
         val cameraMovement = when (viewMode) {
-            TOP_VIEW -> {
+            TOP_VIEW, SIDE_VIEW -> {
                 val deltaX = -mouseManager.deltaX * movementSpeed * tpf
                 val deltaY = -mouseManager.deltaY * movementSpeed * tpf
 
@@ -55,13 +50,15 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
         cameraNode.move(cameraMovement)
     }
 
-    private fun enableTopViewMode() {
-        viewMode = TOP_VIEW
+    private fun enableTopView() {
         cameraNode.rotate(FastMath.PI, 0f, FastMath.PI)
     }
 
-    private fun enableIsoViewMode() {
-        viewMode = ISO_VIEW
+    private fun enableSideView() {
+        cameraNode.rotate(FastMath.PI * 0.75f, 0f, FastMath.PI)
+    }
+
+    private fun enableIsoView() {
         cameraNode.rotate(FastMath.PI, 0f, FastMath.PI) // top view
         cameraNode.rotate(-FastMath.QUARTER_PI, 0f, FastMath.QUARTER_PI)
     }
@@ -74,6 +71,7 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
         if (targetZ > MIN_Z && targetZ < MAX_Z) {
             val cameraMovement = when (viewMode) {
                 TOP_VIEW -> Vector3f(0f, 0f, deltaZ)
+                SIDE_VIEW -> Vector3f(0f, -deltaZ / 2, deltaZ / 2)
                 ISO_VIEW -> Vector3f(-deltaZ / 2, -deltaZ / 2, deltaZ)
             }
 
@@ -82,7 +80,7 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
     }
 
     enum class ViewMode {
-        TOP_VIEW, ISO_VIEW
+        TOP_VIEW, SIDE_VIEW, ISO_VIEW
     }
 
     companion object {
@@ -93,5 +91,12 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
         const val MIN_Z = 2
         const val MAX_Z = 40
 
+        private fun baseLocationFor(viewMode: ViewMode): Vector3f {
+            return when (viewMode) {
+                TOP_VIEW -> Vector3f(0f, 0f, 15f)
+                SIDE_VIEW -> Vector3f(0f, -15f, 15f)
+                ISO_VIEW -> Vector3f(-10f, -10f, 15f)
+            }
+        }
     }
 }
