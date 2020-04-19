@@ -30,6 +30,7 @@ class GameApp : SimpleApplication() {
         cameraNode = CameraNode("cameraNode", cam)
         rootNode.attachChild(cameraNode)
         enableTopViewMode()
+//        enableIsoViewMode()
 
         inputManager.addMapping("WHEEL_UP", MouseAxisTrigger(AXIS_WHEEL, false))
         inputManager.addMapping("WHEEL_DOWN", MouseAxisTrigger(AXIS_WHEEL, true))
@@ -78,7 +79,7 @@ class GameApp : SimpleApplication() {
         if (rightClickPressed) {
             if (deltaX != 0f || deltaY != 0f) {
                 println("${deltaX}, ${deltaY}")
-                val rate = (1 / 50f) * cameraNode.camera.location.z * tpf
+                val rate = (1 / 70f) * cameraNode.camera.location.z * tpf
                 cameraNode.move(deltaX * rate, deltaY * rate, 0f)
             }
         }
@@ -124,6 +125,11 @@ class GameApp : SimpleApplication() {
     private fun enableTopViewMode() {
         cameraNode.move(0f, 0f, 15f)
         cameraNode.rotate(FastMath.PI, 0f, 0f)
+    }
+
+    fun enableIsoViewMode() {
+        cameraNode.move(0f, 0f, 15f)
+        cameraNode.rotate(FastMath.PI * 0.8f, 0f, FastMath.PI * 0.8f)
     }
 
     companion object {
