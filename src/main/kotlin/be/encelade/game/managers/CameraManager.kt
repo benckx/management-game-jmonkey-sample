@@ -62,7 +62,7 @@ class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager, 
         val deltaZ = value * ZOOM_SPEED * currentZ
         val targetZ = currentZ + deltaZ
 
-        if (targetZ > MIN_Z && targetZ < MAX_Z) {
+        if ((value < 0 && targetZ > MIN_Z) || (value > 0 && targetZ < MAX_Z)) {
             val cameraMovement = when (viewMode) {
                 TOP_VIEW -> Vector3f(0f, 0f, deltaZ)
                 SIDE_VIEW -> Vector3f(0f, -deltaZ / 2, deltaZ / 2)
