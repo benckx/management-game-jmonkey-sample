@@ -34,13 +34,17 @@ class GameApp : SimpleApplication() {
         makeBoxFloor()
     }
 
-    private class MyAnalogListener(val parent : GameApp) : AnalogListener {
-        override fun onAnalog(name: String?, value: Float, tpf: Float) {
-            val delta: Float = value * parent.speed * 10
+    fun zoom(value: Float) {
+        val delta: Float = value * speed * 5
+        cameraNode.move(0f, -delta, 0f)
+        println("location: ${cameraNode.camera.location}")
+    }
 
-            when(name) {
-                "WHEEL_UP" -> parent.cameraNode.move(0f, -delta, 0f)
-                "WHEEL_DOWN" -> parent.cameraNode.move(0f, delta, 0f)
+    private class MyAnalogListener(val parent: GameApp) : AnalogListener {
+        override fun onAnalog(name: String?, value: Float, tpf: Float) {
+            when (name) {
+                "WHEEL_UP" -> parent.zoom(value)
+                "WHEEL_DOWN" -> parent.zoom(value)
                 else -> println("Unknown $name")
             }
         }
@@ -59,5 +63,10 @@ class GameApp : SimpleApplication() {
     private fun enableTopViewMode() {
         cameraNode.move(0f, 15f, 0f)
         cameraNode.rotate(FastMath.HALF_PI, 0f, 0f)
+    }
+
+    companion object {
+        const val MAX_Z = 100
+        const val MIN_Z = 5
     }
 }
