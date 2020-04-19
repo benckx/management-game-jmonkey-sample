@@ -44,7 +44,7 @@ class GameApp : SimpleApplication() {
     }
 
     private fun cameraZoom(value: Float) {
-        val delta = value * speed
+        val delta = value
         val currentZ = cameraNode.camera.location.z
         val targetZ = currentZ + delta
 
