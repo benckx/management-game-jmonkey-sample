@@ -3,6 +3,8 @@ package be.encelade.game.managers
 import be.encelade.game.managers.CameraManager.ViewMode.*
 import com.jme3.app.SimpleApplication
 import com.jme3.math.FastMath
+import com.jme3.math.FastMath.PI
+import com.jme3.math.FastMath.QUARTER_PI
 import com.jme3.math.Vector3f
 import com.jme3.scene.CameraNode
 
@@ -11,14 +13,19 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
     private val cameraNode = CameraNode("cameraNode", app.camera)
 
     init {
-        when (viewMode) {
-            TOP_VIEW -> enableTopView()
-            SIDE_VIEW -> enableSideView()
-            ISO_VIEW -> enableIsoView()
-        }
-
+        val rotation = rotationFor(viewMode)
+        cameraNode.rotate(rotation.x, rotation.y, rotation.z)
         cameraNode.move(baseLocationFor(viewMode))
         app.rootNode.attachChild(cameraNode)
+    }
+
+    fun switchView() {
+        val currentAngle = rotationFor(viewMode)
+        cameraNode.rotate(-currentAngle.x, -currentAngle.y, -currentAngle.z)
+
+        val newMode = viewMode.next()
+        val newAngle = rotationFor(newMode)
+        cameraNode.rotate(newAngle.x, newAngle.y, newAngle.z)
     }
 
     fun simpleUpdate(tpf: Float) {
@@ -50,17 +57,12 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
         cameraNode.move(cameraMovement)
     }
 
-    private fun enableTopView() {
-        cameraNode.rotate(FastMath.PI, 0f, FastMath.PI)
-    }
-
-    private fun enableSideView() {
-        cameraNode.rotate(FastMath.PI * 0.75f, 0f, FastMath.PI)
-    }
-
-    private fun enableIsoView() {
-        cameraNode.rotate(FastMath.PI, 0f, FastMath.PI) // top view
-        cameraNode.rotate(-FastMath.QUARTER_PI, 0f, FastMath.QUARTER_PI)
+    fun rotationFor(viewMode: ViewMode): Vector3f {
+        return when (viewMode) {
+            TOP_VIEW -> Vector3f(PI, 0f, PI)
+            SIDE_VIEW -> Vector3f(PI * 0.75f, 0f, PI)
+            ISO_VIEW -> Vector3f(QUARTER_PI * 3f, 0f, QUARTER_PI * 3f)
+        }
     }
 
     fun cameraZoom(value: Float) {
@@ -80,7 +82,18 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
     }
 
     enum class ViewMode {
-        TOP_VIEW, SIDE_VIEW, ISO_VIEW
+        TOP_VIEW, SIDE_VIEW, ISO_VIEW;
+
+        fun next(): ViewMode {
+            val idx =
+                    if (ordinal == values().size - 1) {
+                        0
+                    } else {
+                        ordinal + 1
+                    }
+
+            return values()[idx]
+        }
     }
 
     companion object {
