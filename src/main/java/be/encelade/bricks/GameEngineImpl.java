@@ -44,7 +44,6 @@ public class GameEngineImpl extends SimpleApplication implements GraphicEngine {
     private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("EEE. yyyy - MM - dd");
     private BitmapText dateHUD;
 
-    private Geometry floor;
     private Map<String, Geometry> myBoxes = new HashMap<>();
     private CameraNode cameraNode;
 
@@ -247,7 +246,7 @@ public class GameEngineImpl extends SimpleApplication implements GraphicEngine {
     }
 
     private void makeBoxFloor() {
-        floor = new Geometry("floor", new Box(5, 0.01f, 5));
+        Geometry floor = new Geometry("floor", new Box(5, 0.01f, 5));
         floor.move(0, 0, 0);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Red);
