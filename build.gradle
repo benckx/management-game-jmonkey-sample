@@ -8,6 +8,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.github.ben-manes.versions" version "0.28.0"
+}
+
 apply plugin: 'kotlin'
 apply plugin: 'idea'
 
@@ -16,7 +20,7 @@ repositories {
     jcenter()
 }
 
-def jmeVersion = "3.2.2-stable"
+def jmeVersion = "3.3.0-stable"
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
