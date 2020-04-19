@@ -5,6 +5,7 @@ import be.encelade.bricks.managers.CameraManager.ViewMode.TOP_VIEW
 import com.jme3.app.SimpleApplication
 import com.jme3.math.FastMath
 import com.jme3.math.Quaternion
+import com.jme3.math.Vector3f
 import com.jme3.scene.CameraNode
 
 class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager, var viewMode: ViewMode) {
@@ -22,28 +23,32 @@ class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager, 
                 enableIsoViewMode()
             }
         }
-    }
 
-    fun register() = app.rootNode.attachChild(cameraNode)
+        app.rootNode.attachChild(cameraNode)
+    }
 
     fun simpleUpdate(tpf: Float) {
         if (mouseManager.rightClickPressed && mouseManager.isCursorMoving()) {
+            // speed is proportional by Z axis (i.e. by distance from the floor),
+            // so we move faster as we are zoomed out
             val movementSpeed = CAMERA_SPEED * cameraNode.camera.location.z
 
-            when (viewMode) {
+            val cameraMovement = when (viewMode) {
                 TOP_VIEW -> {
                     val deltaX = -mouseManager.deltaX * movementSpeed * tpf
                     val deltaY = -mouseManager.deltaY * movementSpeed * tpf
 
-                    cameraNode.move(deltaX, deltaY, 0f)
+                    Vector3f(deltaX, deltaY, 0f)
                 }
                 ISO_VIEW -> {
                     val deltaX = -(mouseManager.deltaX + mouseManager.deltaY) * movementSpeed * tpf
                     val deltaY = -(mouseManager.deltaY - mouseManager.deltaX) * movementSpeed * tpf
 
-                    cameraNode.move(deltaX, deltaY, 0f)
+                    Vector3f(deltaX, deltaY, 0f)
                 }
             }
+
+            cameraNode.move(cameraMovement)
         }
     }
 
@@ -67,10 +72,12 @@ class CameraManager(val app: SimpleApplication, val mouseManager: MouseManager, 
         val targetZ = currentZ + deltaZ
 
         if (targetZ > MIN_Z && targetZ < MAX_Z) {
-            when (viewMode) {
-                TOP_VIEW -> cameraNode.move(0f, 0f, deltaZ)
-                ISO_VIEW -> cameraNode.move(-deltaZ / 2, -deltaZ / 2, deltaZ)
+            val cameraMovement = when (viewMode) {
+                TOP_VIEW -> Vector3f(0f, 0f, deltaZ)
+                ISO_VIEW -> Vector3f(-deltaZ / 2, -deltaZ / 2, deltaZ)
             }
+
+            cameraNode.move(cameraMovement)
         }
     }
 

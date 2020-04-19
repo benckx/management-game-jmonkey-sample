@@ -41,8 +41,6 @@ class GameApp : SimpleApplication() {
         val myAnalogListener = MyAnalogListener(cameraManager)
         val myActionListener = MyActionListener(bluePrintManager, mouseManager)
 
-        cameraManager.register()
-
         inputManager.clearMappings()
 
         inputManager.addMapping("B", KeyTrigger(KEY_B)) // TODO
