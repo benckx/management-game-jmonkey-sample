@@ -15,6 +15,7 @@ import com.jme3.scene.shape.Sphere
 
 class GameApp : SimpleApplication() {
 
+    private lateinit var cursorManager: CursorManager
     private lateinit var cameraManager: CameraManager
 
     override fun simpleInitApp() {
@@ -24,7 +25,9 @@ class GameApp : SimpleApplication() {
         flyCam.setEnabled(false)
         inputManager.setCursorVisible(true)
 
-        cameraManager = CameraManager(this)
+        cursorManager = CursorManager(this)
+
+        cameraManager = CameraManager(this, cursorManager)
         cameraManager.register()
         cameraManager.enableTopViewMode()
 
@@ -33,7 +36,7 @@ class GameApp : SimpleApplication() {
         inputManager.addMapping(MOUSE_RIGHT_CLICK, MouseButtonTrigger(BUTTON_RIGHT))
 
         inputManager.addListener(MyAnalogListener(cameraManager), WHEEL_UP, WHEEL_DOWN)
-        inputManager.addListener(MyActionListener(cameraManager), MOUSE_RIGHT_CLICK)
+        inputManager.addListener(MyActionListener(cursorManager), MOUSE_RIGHT_CLICK)
 
         showOrigin()
         addFloor()
@@ -41,6 +44,7 @@ class GameApp : SimpleApplication() {
 
     override fun simpleUpdate(tpf: Float) {
         cameraManager.simpleUpdate(tpf)
+        cursorManager.simpleUpdate()
     }
 
     private fun showOrigin() {
