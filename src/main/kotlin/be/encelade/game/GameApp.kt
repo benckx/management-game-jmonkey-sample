@@ -4,6 +4,7 @@ import be.encelade.game.inputlisteners.MyActionListener
 import be.encelade.game.inputlisteners.MyAnalogListener
 import be.encelade.game.managers.BluePrintManager
 import be.encelade.game.managers.CameraManager
+import be.encelade.game.managers.CameraManager.ViewMode.ISO_VIEW
 import be.encelade.game.managers.CameraManager.ViewMode.TOP_VIEW
 import be.encelade.game.managers.MouseManager
 import com.jme3.app.SimpleApplication
@@ -34,7 +35,7 @@ class GameApp : SimpleApplication() {
 
         bluePrintManager = BluePrintManager(this)
         mouseManager = MouseManager(this, bluePrintManager)
-        cameraManager = CameraManager(this, mouseManager, TOP_VIEW)
+        cameraManager = CameraManager(this, mouseManager, ISO_VIEW)
 
         val myAnalogListener = MyAnalogListener(cameraManager)
         val myActionListener = MyActionListener(bluePrintManager, mouseManager)

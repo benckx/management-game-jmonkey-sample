@@ -30,6 +30,7 @@ class BluePrintManager(val app: SimpleApplication) {
         if (enabled) {
             destroy()
             create()
+            println("position: $position")
         }
     }
 
@@ -46,8 +47,7 @@ class BluePrintManager(val app: SimpleApplication) {
 
     private fun makeBox(): Geometry {
         val box = Box(0.5f, 0.5f, 0.1f)
-        val key = BLUEPRINT_BLOCK
-        val geometry = Geometry(key, box)
+        val geometry = Geometry(BLUEPRINT_BLOCK, box)
         geometry.move(posX(), posY(), 0.1f)
         val mat = Material(app.assetManager, "Common/MatDefs/Misc/Unshaded.j3md")
         mat.setColor("Color", ColorRGBA.Blue)

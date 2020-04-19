@@ -8,7 +8,7 @@ fun main() {
     settings.setResolution(1920, 1024)
     settings.put("VSync", true)
     settings.put("Samples", 4)
-    settings.put("Title", "Bricks")
+    settings.put("Title", "Game")
 
     val gameApp = GameApp()
     gameApp.isShowSettings = false

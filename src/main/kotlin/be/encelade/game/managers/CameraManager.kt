@@ -28,27 +28,31 @@ class CameraManager(app: SimpleApplication, val mouseManager: MouseManager, var 
 
     fun simpleUpdate(tpf: Float) {
         if (mouseManager.rightClickPressed && mouseManager.isCursorMoving()) {
-            // speed is proportional by Z axis (i.e. by distance from the floor),
-            // so we move faster as we are zoomed out
-            val movementSpeed = CAMERA_SPEED * cameraNode.camera.location.z
-
-            val cameraMovement = when (viewMode) {
-                TOP_VIEW -> {
-                    val deltaX = -mouseManager.deltaX * movementSpeed * tpf
-                    val deltaY = -mouseManager.deltaY * movementSpeed * tpf
-
-                    Vector3f(deltaX, deltaY, 0f)
-                }
-                ISO_VIEW -> {
-                    val deltaX = -(mouseManager.deltaX + mouseManager.deltaY) * movementSpeed * tpf
-                    val deltaY = -(mouseManager.deltaY - mouseManager.deltaX) * movementSpeed * tpf
-
-                    Vector3f(deltaX, deltaY, 0f)
-                }
-            }
-
-            cameraNode.move(cameraMovement)
+            rightClickMovement(tpf)
         }
+    }
+
+    private fun rightClickMovement(tpf: Float) {
+        // speed is proportional by Z axis (i.e. by distance from the floor),
+        // so we move faster as we are zoomed out
+        val movementSpeed = CAMERA_SPEED * cameraNode.camera.location.z
+
+        val cameraMovement = when (viewMode) {
+            TOP_VIEW -> {
+                val deltaX = -mouseManager.deltaX * movementSpeed * tpf
+                val deltaY = -mouseManager.deltaY * movementSpeed * tpf
+
+                Vector3f(deltaX, deltaY, 0f)
+            }
+            ISO_VIEW -> {
+                val deltaX = -(mouseManager.deltaX + mouseManager.deltaY) * movementSpeed * tpf
+                val deltaY = -(mouseManager.deltaY - mouseManager.deltaX) * movementSpeed * tpf
+
+                Vector3f(deltaX, deltaY, 0f)
+            }
+        }
+
+        cameraNode.move(cameraMovement)
     }
 
     private fun enableTopViewMode() {
