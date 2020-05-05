@@ -2,6 +2,11 @@
 <img src="https://img.shields.io/badge/Donate-PayPal-green.svg"/>
 </a>
 
+# Deprecated
+
+A better version of the camera system has been moved to a stand-alone library (https://github.com/benckx/ouistiti), 
+therefore this repo won't be maintained nor updated.
+
 # About
 
 Sample project to build a management game with Kotlin & jMonkeyEngine.
